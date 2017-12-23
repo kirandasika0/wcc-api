@@ -1,10 +1,8 @@
 package com.wcc.admin;
 
+import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.Request;
-
-import java.util.Collection;
 
 @RestController
 // URL's prefixed /admin will reach this controller.
