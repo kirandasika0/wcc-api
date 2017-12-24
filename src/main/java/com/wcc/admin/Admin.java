@@ -83,4 +83,17 @@ public class Admin {
                 ", perms=" + perms +
                 '}';
     }
+
+    /*
+        Check if username and password match for an admin.
+        @param payloadAdmin adminProvided from client side for validation
+        @param dbAdmin an admin instance from the database
+     */
+    public boolean loginAdmin(Admin payloadAdmin) {
+        if (payloadAdmin.getUsername().equals(this.getUsername())) {
+            return payloadAdmin.getPassword().equals(this.getPassword());
+        }
+        return false;
+    }
+
 }
