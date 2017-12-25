@@ -16,4 +16,13 @@ public class AdminServiceImpl implements AdminService{
 
         return query1.getResultList();
     }
+
+    @Override
+    public Admin findOneAdminByUsername(String query) {
+        Query query1 = entityManager.createNativeQuery("SELECT * FROM wcc.admin WHERE username LIKE ? LIMIT 1");
+        query1.setParameter(1, query + "%");
+
+        // Type casting result to avoid mismatches later.
+        return (Admin)query1.getSingleResult();
+    }
 }

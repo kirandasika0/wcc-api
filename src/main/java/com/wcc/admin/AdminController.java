@@ -1,6 +1,8 @@
 package com.wcc.admin;
 
 import java.util.Collection;
+
+import com.wcc.error.LoginFailureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +40,27 @@ public class AdminController {
     @RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
     public Collection<Admin> findAdminByUsername(@PathVariable String query) {
         return adminRepository.findAdminByUsername(query);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Admin loginAdminWithUsernameAndPassword(@RequestBody Admin adminPayload) throws LoginFailureException {
+        if (adminPayload.getUsername() == null || adminPayload.getUsername().length() == 0) {
+            throw new LoginFailureException("username and password required");
+        }
+        if (adminPayload.getPassword() == null || adminPayload.getPassword().length() == 0) {
+            throw new LoginFailureException("username and password required");
+        }
+
+        Admin dbAdmin = adminRepository.findOneAdminByUsername(adminPayload.getUsername());
+        if (dbAdmin == null) {
+            throw new LoginFailureException("username not found.");
+        }
+
+        // Login validation
+        if (!adminPayload.getUsername().equals(dbAdmin.getUsername()) || !adminPayload.getPassword().equals(dbAdmin.getPassword())) {
+            throw new LoginFailureException("invalid login credentials");
+        }
+
+        return dbAdmin;
     }
 }
