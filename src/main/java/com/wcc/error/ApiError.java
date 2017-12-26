@@ -2,8 +2,6 @@ package com.wcc.error;
 
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
-
 
 public class ApiError {
     private HttpStatus status;

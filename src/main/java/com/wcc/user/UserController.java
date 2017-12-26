@@ -1,6 +1,7 @@
 package com.wcc.user;
 
 
+import com.wcc.error.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public User findById(@PathVariable Long userId) {
-        return userRepository.findOne(userId);
+    public User findById(@PathVariable Long userId) throws UserNotFoundException{
+        User currentUser = userRepository.findOne(userId);
+        if (currentUser == null) {
+            throw new UserNotFoundException("user with id not found");
+        }
+
+        return currentUser;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -58,4 +64,5 @@ public class UserController {
 
         return currUser;
     }
+
 }
