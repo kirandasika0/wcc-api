@@ -3,8 +3,6 @@ package com.wcc.order;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.Collection;
-import java.util.List;
 
 public class OrderServiceImpl implements OrderService{
     @PersistenceContext
@@ -12,9 +10,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<Orders> findOrderByUsername(String query) {
-        Query query1 = entityManager.createNativeQuery("SELECT * FROM wcc.admin WHERE orders LIKE ?", Orders.class);
+    public Orders findOrderByUserId(Long query) {
+        Query query1 = entityManager.createNativeQuery("SELECT * FROM wcc.orders WHERE orders.user_id LIMIT 1", Orders.class);
+        //noinspection JpaQueryApiInspection
         query1.setParameter(1, query + "%");
-        return query1.getResultList();
+        return (Orders) query1.getResultList();
     }
 }

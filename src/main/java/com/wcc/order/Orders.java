@@ -16,9 +16,9 @@ public class Orders {
     @Length(max = 255)
     private String itemName;
 
-    private enum status {RECEIVED, PROCESSING, PROCESSED}
+    private enum Status {RECEIVED, PROCESSING, PROCESSED}
 
-    private status orderStatus;
+    private Status orderStatus;
 
     @Length(max = 255)
     private String specialRequest;
@@ -42,11 +42,11 @@ public class Orders {
         this.itemName = itemName;
     }
 
-    public status getOrderStatus() {
+    public Status getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(status orderStatus) {
+    public void setOrderStatus(Status orderStatus) {
         this.orderStatus = orderStatus;
     }
 

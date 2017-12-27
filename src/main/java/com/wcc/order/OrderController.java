@@ -32,4 +32,10 @@ public class OrderController {
         orderRepository.save(currOrder);
         return currOrder;
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public Orders searchByUserId(@RequestBody Long userId) {
+        return orderRepository.findOrderByUserId(userId);
+    }
+
 }
