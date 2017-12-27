@@ -11,17 +11,25 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public Order createNewOrder(@RequestBody Order order) {
+    public Orders createNewOrder(@RequestBody Orders order) {
         return orderRepository.save(order);
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
-    public Order getOrderById(@PathVariable Long orderId) {
+    public Orders getOrderById(@PathVariable Long orderId) {
         return orderRepository.findOne(orderId);
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
-    public void updateOrderDetails(@PathVariable Long orderId, @RequestBody Order orderIn) {
-        Order currOrder = orderRepository.findOne(orderId);
+    public Orders updateOrderDetails(@PathVariable Long orderId, @RequestBody Orders orderIn) {
+        Orders currOrder = orderRepository.findOne(orderId);
+        currOrder.setItemName( (orderIn.getItemName() != null) ?
+                orderIn.getItemName() : currOrder.getItemName());
+        currOrder.setSpecialRequest( (orderIn.getSpecialRequest() != null) ?
+                orderIn.getSpecialRequest() : currOrder.getSpecialRequest());
+
+        //updating fields in the order request
+        orderRepository.save(currOrder);
+        return currOrder;
     }
 }

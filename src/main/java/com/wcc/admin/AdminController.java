@@ -26,7 +26,7 @@ public class AdminController {
     @RequestMapping(value = "/{adminId}", method = RequestMethod.PUT)
     public Admin updateAdminDetails(@PathVariable Long adminId, @RequestBody Admin adminIn) {
         Admin currAdmin = adminRepository.findOne(adminId);
-        currAdmin.setUsername(adminIn.getUsername() != null ? adminIn.getUsername() : currAdmin.getUsername());
+        currAdmin.setUsername((adminIn.getUsername() != null) ? adminIn.getUsername() : currAdmin.getUsername());
         currAdmin.setPassword(adminIn.getPassword() != null ? adminIn.getPassword() : currAdmin.getPassword());
         currAdmin.setPerms(adminIn.getPerms() != null ? adminIn.getPerms() : currAdmin.getPerms());
         currAdmin.setSuperUser(adminIn.isSuperUser());

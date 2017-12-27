@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,7 +16,7 @@ public class Order {
     @Length(max = 255)
     private String itemName;
 
-    private enum status {RECEIVED, PROCESSING, PROCESSED};
+    private enum status {RECEIVED, PROCESSING, PROCESSED}
 
     private status orderStatus;
 

@@ -10,6 +10,7 @@ public class AdminServiceImpl implements AdminService{
     EntityManager entityManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<Admin> findAdminByUsername(String query) {
         Query query1= entityManager.createNativeQuery("SELECT * FROM wcc.admin WHERE username LIKE ?", Admin.class);
         query1.setParameter(1, query + "%");
