@@ -25,14 +25,14 @@ public class OrderController {
     @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
     public Orders updateOrderDetails(@PathVariable Long orderId, @RequestBody Orders orderIn) {
         Orders currOrder = orderRepository.findOne(orderId);
-        currOrder.setItemName((orderIn.getItemName() == null) ?
-                currOrder.getItemName() : orderIn.getItemName());
+        currOrder.setItemName((orderIn.getItemName() != null) ?
+                orderIn.getItemName() : currOrder.getItemName());
 
-        currOrder.setSpecialRequest((orderIn.getSpecialRequest() == null) ?
-                currOrder.getSpecialRequest() : orderIn.getSpecialRequest());
+        currOrder.setSpecialRequest((orderIn.getSpecialRequest() != null) ?
+                orderIn.getSpecialRequest() : currOrder.getSpecialRequest());
 
-        currOrder.setOrderStatus((orderIn.getOrderStatus() == null) ?
-                currOrder.getOrderStatus() : orderIn.getOrderStatus());
+        currOrder.setOrderStatus((orderIn.getOrderStatus() != null) ?
+                orderIn.getOrderStatus() : currOrder.getOrderStatus());
 
         currOrder.setUserId(currOrder.getUserId());
 
