@@ -1,5 +1,7 @@
 package com.wcc.order;
 
+import java.util.Collection;
+
 public interface OrderService {
-    Orders findOrderByUserId(Long query);
+    Collection<Orders> findOrderByUserId(Long userIdIn);
 }

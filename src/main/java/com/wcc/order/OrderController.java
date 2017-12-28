@@ -3,6 +3,8 @@ package com.wcc.order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 
 @RequestMapping("/order")
@@ -40,7 +42,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public Orders searchByUserId(@RequestBody Long userId) {
+    public Collection<Orders> searchByUserId(@RequestBody Long userId) {
         return orderRepository.findOrderByUserId(userId);
     }
 
