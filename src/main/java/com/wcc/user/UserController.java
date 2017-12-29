@@ -2,6 +2,8 @@ package com.wcc.user;
 
 
 import com.wcc.error.UserNotFoundException;
+import com.wcc.order.OrderRepository;
+import com.wcc.order.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,9 @@ public class UserController {
     // This instance variable will handle all database CRUD operations.
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @RequestMapping("/")
     public User indexRoute() {
@@ -65,4 +70,8 @@ public class UserController {
         return currUser;
     }
 
+    @RequestMapping(value = "/{userId}/orders", method = RequestMethod.GET)
+    public Collection<Orders> findUserOrders(@PathVariable Integer userId) {
+        return orderRepository.findOrdersByUserId(userId);
+    }
 }

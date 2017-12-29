@@ -1,5 +1,7 @@
 package com.wcc.order;
 
+import com.wcc.payment.Payment;
+import com.wcc.payment.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,9 @@ import java.util.Collection;
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Orders createNewOrder(@RequestBody Orders order) {
@@ -44,5 +49,21 @@ public class OrderController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public Collection<Orders> searchByUserId(@RequestBody Long userId) {
         return orderRepository.findOrderByUserId(userId);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Collection<Orders> findOrders(@RequestParam(name = "num", defaultValue = "10", required = false) Integer numOrders) throws Exception{
+        if (numOrders < 0) {
+            throw new Exception("invalid query limit number");
+        }
+        return orderRepository.findRecentOrdersWithLimit(numOrders);
+    }
+
+    @RequestMapping(value = "/{orderId}/payment", method = RequestMethod.POST)
+    public Payment processPayment(@PathVariable Long orderId) {
+        Payment newPayment = new Payment();
+        newPayment.setOrder(orderRepository.findOne(orderId));
+        paymentRepository.save(newPayment);
+        return newPayment;
     }
 }

@@ -25,7 +25,13 @@ public class Orders {
 
     private Long userId;
 
-    //Mutators and Accessors
+    private Long createdAt;
+
+    public Orders() {
+        this.createdAt = System.currentTimeMillis();
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -64,6 +70,14 @@ public class Orders {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
