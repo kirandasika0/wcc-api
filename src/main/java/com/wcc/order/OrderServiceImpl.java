@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Collection;
-import java.util.List;
 
 public class OrderServiceImpl implements OrderService{
     @PersistenceContext
@@ -15,6 +14,7 @@ public class OrderServiceImpl implements OrderService{
         Query orderByUserIdQuery = entityManager
                 .createNativeQuery("SELECT * FROM wcc.orders WHERE user_id = ? ORDER BY id DESC", Orders.class);
 
+        orderByUserIdQuery.setParameter(1, userIdIn);
         return orderByUserIdQuery.getResultList();
     }
 }

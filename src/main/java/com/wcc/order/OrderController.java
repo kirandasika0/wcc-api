@@ -45,5 +45,4 @@ public class OrderController {
     public Collection<Orders> searchByUserId(@RequestBody Long userId) {
         return orderRepository.findOrderByUserId(userId);
     }
-
 }
