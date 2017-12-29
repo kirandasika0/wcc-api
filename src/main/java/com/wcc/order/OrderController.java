@@ -60,10 +60,12 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/{orderId}/payment", method = RequestMethod.POST)
-    public Payment processPayment(@PathVariable Long orderId) {
+    public Orders processPayment(@PathVariable Long orderId) {
+        Orders currOrder = orderRepository.findOne(orderId);
         Payment newPayment = new Payment();
-        newPayment.setOrder(orderRepository.findOne(orderId));
+        currOrder.setPayment(newPayment);
+
         paymentRepository.save(newPayment);
-        return newPayment;
+        return currOrder;
     }
 }

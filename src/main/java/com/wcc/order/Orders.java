@@ -1,11 +1,9 @@
 package com.wcc.order;
 
+import com.wcc.payment.Payment;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Orders {
@@ -22,6 +20,10 @@ public class Orders {
 
     @Length(max = 255)
     private String specialRequest;
+
+    @OneToOne(targetEntity = Payment.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Payment payment;
 
     private Long userId;
 
@@ -78,6 +80,14 @@ public class Orders {
 
     public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     @Override

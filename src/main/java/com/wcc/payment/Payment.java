@@ -10,10 +10,6 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(targetEntity = Orders.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", nullable = false)
-    private Orders order;
-
     private Long createdAt;
 
     public Payment() {
@@ -28,14 +24,6 @@ public class Payment {
         this.id = id;
     }
 
-    public Orders getOrder() {
-        return order;
-    }
-
-    public void setOrder(Orders order) {
-        this.order = order;
-    }
-
     public Long getCreatedAt() {
         return createdAt;
     }
@@ -48,7 +36,6 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "id=" + id +
-                ", order=" + order +
                 ", createdAt=" + createdAt +
                 '}';
     }
