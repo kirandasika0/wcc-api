@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-
 @RequestMapping("/order")
 public class OrderController {
     @Autowired
@@ -23,8 +22,11 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
-    public Orders getOrderById(@PathVariable Long orderId) {
-        return orderRepository.findOne(orderId);
+    public Orders getOrderById(@PathVariable Long orderId) throws Exception{
+        Orders currOrder = orderRepository.findOne(orderId);
+        if (currOrder == null)
+            throw new Exception("order not found.");
+        return currOrder;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
