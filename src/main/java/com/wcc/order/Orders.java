@@ -1,6 +1,7 @@
 package com.wcc.order;
 
 import com.wcc.payment.Payment;
+import com.wcc.user.User;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -25,7 +26,9 @@ public class Orders {
     @JoinColumn(name = "id")
     private Payment payment;
 
-    private Long userId;
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private User user;
 
     private Long createdAt;
 
@@ -66,12 +69,12 @@ public class Orders {
         this.specialRequest = specialRequest;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getCreatedAt() {
@@ -92,11 +95,14 @@ public class Orders {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id='" + getId() + '\'' +
-                ", item='" + getItemName() + '\'' +
-                ", special request='" + getSpecialRequest() + '\''+
-                ", order status='" + getOrderStatus() +
-                "'}";
+        return "Orders{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", orderStatus=" + orderStatus +
+                ", specialRequest='" + specialRequest + '\'' +
+                ", payment=" + payment +
+                ", user=" + user +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

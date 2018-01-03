@@ -71,7 +71,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}/orders", method = RequestMethod.GET)
-    public Collection<Orders> findUserOrders(@PathVariable Integer userId) {
-        return orderRepository.findOrdersByUserId(userId);
+    public Collection<Orders> findUserOrders(@PathVariable Long userId) {
+        User currUser = userRepository.findOne(userId);
+        return orderRepository.findOrdersByUser(currUser);
     }
 }

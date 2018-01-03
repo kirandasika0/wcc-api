@@ -2,6 +2,8 @@ package com.wcc.order;
 
 import com.wcc.payment.Payment;
 import com.wcc.payment.PaymentRepository;
+import com.wcc.user.User;
+import com.wcc.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,21 @@ public class OrderController {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public Orders createNewOrder(@RequestBody Orders order) {
-        return orderRepository.save(order);
+    public Orders createNewOrder(@RequestBody Orders order) throws Exception{
+        try {
+            User orderUser = userRepository.findOne(order.getUser().getUserId());
+            if (orderUser == null)
+                throw new Exception("error while creating order.");
+            order.setUser(orderUser);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        orderRepository.save(order);
+        return order;
     }
 
     @RequestMapping(value = "/{orderId}", method = RequestMethod.GET)
@@ -41,16 +55,9 @@ public class OrderController {
         currOrder.setOrderStatus((orderIn.getOrderStatus() == null) ?
                 currOrder.getOrderStatus() : orderIn.getOrderStatus());
 
-        currOrder.setUserId(currOrder.getUserId());
-
         //updating fields in the order request
         orderRepository.save(currOrder);
         return currOrder;
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public Collection<Orders> searchByUserId(@RequestBody Long userId) {
-        return orderRepository.findOrderByUserId(userId);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
