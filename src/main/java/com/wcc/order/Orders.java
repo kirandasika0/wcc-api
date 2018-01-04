@@ -12,8 +12,9 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Length(max = 255)
-    private String itemName;
+    @OneToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Product product;
 
     private enum Status {RECEIVED, PROCESSING, PROCESSED}
 
@@ -45,12 +46,12 @@ public class Orders {
         this.id = id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Status getOrderStatus() {
@@ -97,7 +98,7 @@ public class Orders {
     public String toString() {
         return "Orders{" +
                 "id=" + id +
-                ", itemName='" + itemName + '\'' +
+                ", product=" + product +
                 ", orderStatus=" + orderStatus +
                 ", specialRequest='" + specialRequest + '\'' +
                 ", payment=" + payment +

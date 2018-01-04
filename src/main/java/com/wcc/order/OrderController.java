@@ -5,9 +5,13 @@ import com.wcc.payment.PaymentRepository;
 import com.wcc.user.User;
 import com.wcc.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.Request;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 @RestController
 @RequestMapping("/order")
@@ -21,16 +25,21 @@ public class OrderController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Orders createNewOrder(@RequestBody Orders order) throws Exception{
-        try {
-            User orderUser = userRepository.findOne(order.getUser().getUserId());
-            if (orderUser == null)
-                throw new Exception("error while creating order.");
-            order.setUser(orderUser);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+        User orderUser = userRepository.findOne(order.getUser().getUserId());
+        if (orderUser == null)
+            throw new Exception("error while creating order.");
+
+        Product orderProduct = productRepository.findOne(order.getProduct().getId());
+        if (orderProduct == null)
+            throw new Exception("error while creating order.");
+
+        order.setProduct(orderProduct);
+        order.setUser(orderUser);
         orderRepository.save(order);
         return order;
     }
@@ -46,8 +55,8 @@ public class OrderController {
     @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
     public Orders updateOrderDetails(@PathVariable Long orderId, @RequestBody Orders orderIn) {
         Orders currOrder = orderRepository.findOne(orderId);
-        currOrder.setItemName((orderIn.getItemName() == null) ?
-                currOrder.getItemName() : orderIn.getItemName());
+        currOrder.setProduct((orderIn.getProduct() == null) ?
+                currOrder.getProduct() : orderIn.getProduct());
 
         currOrder.setSpecialRequest((orderIn.getSpecialRequest() == null) ?
                 currOrder.getSpecialRequest() : orderIn.getSpecialRequest());
@@ -65,7 +74,12 @@ public class OrderController {
         if (numOrders < 0) {
             throw new Exception("invalid query limit number");
         }
-        return orderRepository.findRecentOrdersWithLimit(numOrders);
+        return orderRepository.findNewOrdersByLimit(numOrders);
+    }
+
+    @RequestMapping(value = "/old", method = RequestMethod.GET)
+    public Collection<Orders> findOldOrders() {
+        return orderRepository.findRecentOrdersWithLimit(100);
     }
 
     @RequestMapping(value = "/{orderId}/payment", method = RequestMethod.POST)
@@ -76,5 +90,19 @@ public class OrderController {
 
         paymentRepository.save(newPayment);
         return currOrder;
+    }
+
+    @RequestMapping(value = "/product/new", method = RequestMethod.POST)
+    public Product newProduct(@RequestBody Product productIn) {
+        return productRepository.save(productIn);
+    }
+
+    @RequestMapping(value = "/product/", method = RequestMethod.GET)
+    public Collection<Product> allProducts() {
+        Iterator<Product> itr = productRepository.findAll().iterator();
+        Collection<Product> products = new ArrayList<>();
+        itr.forEachRemaining(products::add);
+
+        return products;
     }
 }
