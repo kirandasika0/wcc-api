@@ -1,28 +1,17 @@
 version: '3'
 services:
-  api-service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    networks:
-      - net-spring-db
-    depends_on:
-      - mysql-wcc
-
-  mysql-wcc:
-    image: mysql:5.7
-    ports:
-      - "3306:3306"
-    networks:
-      - net-spring-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wcc
-      MYSQL_USER: user1
-      MYSQL_PASSWORD: root
-
-networks:
-  net-spring-db:
-    driver: bridge
+    mysql-wcc:
+        image: mysql:latest
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_DATABASE=wcc
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+    api-service:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8080:8080"
+        depends_on:
+          - mysql-wcc

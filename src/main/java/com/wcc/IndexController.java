@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IndexController {
-    @RequestMapping(value = "/", produces = "application/json")
-    public Object index() {
-        return "wcc_api";
+    @RequestMapping(value = "/")
+    public String index() {
+        return "World Cup Coffee";
     }
 }
-
-
