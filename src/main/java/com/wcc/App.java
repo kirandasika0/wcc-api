@@ -20,7 +20,7 @@ public class App {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 super.addCorsMappings(registry);
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200")
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200", "https://taricjain.github.io/*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
