@@ -30,9 +30,19 @@ public class OrderController {
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Orders createNewOrder(@RequestBody Orders order) throws Exception{
-        User orderUser = userRepository.findOne(order.getUser().getUserId());
-        if (orderUser == null)
-            throw new Exception("error while creating order.");
+
+        // Detect if user is in the database
+        User orderUser = userRepository.findUserByEmail(order.getUser().getEmail());
+        if (orderUser == null) {
+            // User not in database
+            // Saving new instance of the user
+            User newUser = new User();
+            newUser.setDisplayName(order.getUser().getDisplayName());
+            newUser.setFullName(order.getUser().getFullName());
+            newUser.setMobileNumber(order.getUser().getMobileNumber());
+            newUser.setEmail(order.getUser().getEmail());
+            orderUser = userRepository.save(newUser);
+        }
 
         Product orderProduct = productRepository.findOne(order.getProduct().getId());
         if (orderProduct == null)

@@ -6,4 +6,5 @@ import java.util.Collection;
 
 public interface OrderService {
     Collection<Orders> findOrdersByUser(User userIn);
+
 }

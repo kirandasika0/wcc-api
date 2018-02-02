@@ -17,6 +17,7 @@ public class User {
     private Long id;
     private String fullName;
     private String displayName;
+    private String email;
     private String mobileNumber;
 
 
@@ -48,5 +49,13 @@ public class User {
 
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
