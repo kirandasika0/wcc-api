@@ -75,4 +75,9 @@ public class UserController {
         User currUser = userRepository.findOne(userId);
         return orderRepository.findOrdersByUser(currUser);
     }
+
+    @RequestMapping(value = "/search_email", method = RequestMethod.GET)
+    public User findUserByEmail(@RequestBody User userIn) {
+        return userRepository.findUserByEmail(userIn.getEmail());
+    }
 }

@@ -45,12 +45,15 @@ public class OrderController {
         }
 
         Product orderProduct = productRepository.findOne(order.getProduct().getId());
-        if (orderProduct == null)
+        if (orderProduct == null) {
             throw new Exception("error while creating order.");
+        }
 
         order.setProduct(orderProduct);
         order.setUser(orderUser);
+
         orderRepository.save(order);
+
         return order;
     }
 
