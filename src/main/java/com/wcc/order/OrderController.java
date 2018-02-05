@@ -32,17 +32,13 @@ public class OrderController {
     public Orders createNewOrder(@RequestBody Orders order) throws Exception{
 
         // Detect if user is in the database
-        User orderUser = userRepository.findUserByEmail(order.getUser().getEmail());
-        if (orderUser == null) {
-            // User not in database
-            // Saving new instance of the user
-            User newUser = new User();
-            newUser.setDisplayName(order.getUser().getDisplayName());
-            newUser.setFullName(order.getUser().getFullName());
-            newUser.setMobileNumber(order.getUser().getMobileNumber());
-            newUser.setEmail(order.getUser().getEmail());
-            orderUser = userRepository.save(newUser);
-        }
+        User newUser = new User();
+        newUser.setDisplayName(order.getUser().getDisplayName());
+        newUser.setFullName(order.getUser().getFullName());
+        newUser.setMobileNumber(order.getUser().getMobileNumber());
+        newUser.setEmail(order.getUser().getEmail());
+        userRepository.save(newUser);
+
 
         Product orderProduct = productRepository.findOne(order.getProduct().getId());
         if (orderProduct == null) {
@@ -50,7 +46,7 @@ public class OrderController {
         }
 
         order.setProduct(orderProduct);
-        order.setUser(orderUser);
+        order.setUser(newUser);
 
         orderRepository.save(order);
 
