@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @RestController
 // All URl routes prefixed with /user will enter this controller
@@ -72,8 +74,15 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/orders", method = RequestMethod.GET)
     public Collection<Orders> findUserOrders(@PathVariable Long userId) {
-        User currUser = userRepository.findOne(userId);
-        return orderRepository.findOrdersByUser(currUser);
+        // Find user orders
+        Stream<Orders> ordersStream = StreamSupport.stream(Spliterators
+                .spliteratorUnknownSize(orderRepository.findAll().iterator(), Spliterator.ORDERED), false);
+        Collection<Orders> userOrders = new ArrayList<>();
+
+        // Filter and get all user orders.
+        ordersStream.filter(o -> o.getUser().getUserId().equals(userId)).forEach(o -> userOrders.add(o));
+
+        return userOrders;
     }
 
     @RequestMapping(value = "/search_email", method = RequestMethod.GET)
