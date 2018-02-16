@@ -108,10 +108,10 @@ public class OrderController {
 
     @RequestMapping(value = "/product/", method = RequestMethod.GET)
     public Collection<Product> allProducts() {
+
         Iterator<Product> itr = productRepository.findAll().iterator();
         Collection<Product> products = new ArrayList<>();
         itr.forEachRemaining(products::add);
-
         return products;
     }
 }

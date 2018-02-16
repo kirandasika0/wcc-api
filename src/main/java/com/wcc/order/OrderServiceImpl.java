@@ -6,23 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
     @Override
     public Collection<Orders> findOrdersByUser(User userIn) {
+        Stream<Orders> strm = StreamSupport.stream(Spliterators
+                .spliteratorUnknownSize(orderRepository.findAll().iterator(), Spliterator.ORDERED), false);
         Collection<Orders> userOrders = new ArrayList<>();
-        Iterable<Orders> allOrders = orderRepository.findAll();
-        for (Orders order: allOrders) {
-            if (order.getUser().getUserId().equals(userIn.getUserId())) {
-                userOrders.add(order);
-            }
-        }
+
+        // Filter and get all user orders.
+        strm.filter(o -> o.getUser().getUserId().equals(userIn)).forEach(o -> userOrders.add(o));
+
         return userOrders;
     }
 }
