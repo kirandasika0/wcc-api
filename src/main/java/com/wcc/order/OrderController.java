@@ -28,6 +28,10 @@ public class OrderController {
     @Autowired
     private ProductRepository productRepository;
 
+    // Services
+    @Autowired
+    private OrderService orderService;
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Orders createNewOrder(@RequestBody Orders order) throws Exception{
 
@@ -83,12 +87,12 @@ public class OrderController {
         if (numOrders < 0) {
             throw new Exception("invalid query limit number");
         }
-        return orderRepository.findNewOrdersByLimit(numOrders);
+        return orderService.findNewOrdersByLimit(numOrders);
     }
 
     @RequestMapping(value = "/old", method = RequestMethod.GET)
     public Collection<Orders> findOldOrders() {
-        return orderRepository.findRecentOrdersWithLimit(100);
+        return orderService.findRecentOrders();
     }
 
     @RequestMapping(value = "/{orderId}/payment", method = RequestMethod.POST)

@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 // All URl routes prefixed with /user will enter this controller
 @RequestMapping("/user")
 public class UserController {
-    // This instance variable will handle all database CRUD operations.
+    // These instance variables will handle all database CRUD operations.
     @Autowired
     private UserRepository userRepository;
 
@@ -74,7 +74,7 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/orders", method = RequestMethod.GET)
     public Collection<Orders> findUserOrders(@PathVariable Long userId) {
-        // Find user orders
+        // Find all orders
         Stream<Orders> ordersStream = StreamSupport.stream(Spliterators
                 .spliteratorUnknownSize(orderRepository.findAll().iterator(), Spliterator.ORDERED), false);
         Collection<Orders> userOrders = new ArrayList<>();

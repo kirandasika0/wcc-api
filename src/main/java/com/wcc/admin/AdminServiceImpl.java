@@ -1,29 +1,37 @@
 package com.wcc.admin;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.Collection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+@Service
 public class AdminServiceImpl implements AdminService{
-    @PersistenceContext
-    EntityManager entityManager;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Override
     @SuppressWarnings("unchecked")
     public Collection<Admin> findAdminByUsername(String query) {
-        Query query1= entityManager.createNativeQuery("SELECT * FROM wcc.admin WHERE username LIKE ?", Admin.class);
-        query1.setParameter(1, query + "%");
+        Stream<Admin> adminStream = StreamSupport.stream(
+                adminRepository.findAll().spliterator(), false);
 
-        return query1.getResultList();
+        return adminStream
+                .filter(a -> a.getUsername().equals(query))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Admin findOneAdminByUsername(String query) {
-        Query query1 = entityManager.createNativeQuery("SELECT * FROM wcc.admin WHERE username LIKE ? LIMIT 1");
-        query1.setParameter(1, query + "%");
+        Stream<Admin> adminStream = StreamSupport.stream(adminRepository.findAll().spliterator(), false);
 
-        // Type casting result to avoid mismatches later.
-        return (Admin)query1.getSingleResult();
+        Optional<Admin> admin = adminStream.filter(a -> a.getUsername().equals(query)).findFirst();
+
+        return admin.get() != null ? admin.get() : null;
     }
 }

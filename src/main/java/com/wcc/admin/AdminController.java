@@ -13,6 +13,9 @@ public class AdminController {
     @Autowired
     private AdminRepository adminRepository;
 
+    @Autowired
+    private AdminService adminService;
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Admin createNewAdmin(@RequestBody Admin admin) {
         return adminRepository.save(admin);
@@ -39,7 +42,7 @@ public class AdminController {
 
     @RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
     public Collection<Admin> findAdminByUsername(@PathVariable String query) {
-        return adminRepository.findAdminByUsername(query);
+        return adminService.findAdminByUsername(query);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -51,7 +54,7 @@ public class AdminController {
             throw new LoginFailureException("username and password required");
         }
 
-        Admin dbAdmin = adminRepository.findOneAdminByUsername(adminPayload.getUsername());
+        Admin dbAdmin = adminService.findOneAdminByUsername(adminPayload.getUsername());
         if (dbAdmin == null) {
             throw new LoginFailureException("username not found.");
         }

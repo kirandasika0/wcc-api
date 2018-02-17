@@ -16,7 +16,7 @@ public class Orders {
     @JoinColumn(name = "id")
     private Product product;
 
-    private enum Status {RECEIVED, PROCESSING, PROCESSED}
+    public enum Status {RECEIVED, PROCESSING, PROCESSED}
 
     private Status orderStatus;
 
