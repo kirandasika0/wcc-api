@@ -35,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderStream
                 .filter(o -> o.getOrderStatus() == Orders.Status.RECEIVED)
+                .limit(limitIn)
                 .forEach(o -> newOrders.add(o));
         return newOrders;
     }
