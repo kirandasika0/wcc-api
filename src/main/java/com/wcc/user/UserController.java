@@ -22,6 +22,10 @@ public class UserController {
     @Autowired
     private OrderRepository orderRepository;
 
+    //Services
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/")
     public User indexRoute() {
         return new User();
@@ -33,6 +37,7 @@ public class UserController {
         newUser.setFullName(user.getFullName());
         newUser.setDisplayName(user.getDisplayName());
         newUser.setMobileNumber(user.getMobileNumber());
+        newUser.setEmail(user.getEmail());
 
         // Save to database and return value
         userRepository.save(newUser);
@@ -85,8 +90,8 @@ public class UserController {
         return userOrders;
     }
 
-    @RequestMapping(value = "/search_email", method = RequestMethod.GET)
+    @RequestMapping(value = "/search_email", method = RequestMethod.POST)
     public User findUserByEmail(@RequestBody User userIn) {
-        return userRepository.findUserByEmail(userIn.getEmail());
+        return userService.findUserByEmail(userIn.getEmail()).get();
     }
 }
