@@ -17,7 +17,10 @@ public class AdminController {
     private AdminService adminService;
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public Admin createNewAdmin(@RequestBody Admin admin) {
+    public Admin createNewAdmin(@RequestBody Admin admin) throws Exception{
+        if (adminService.findOneAdminByUsername(admin.getUsername()) != null) {
+            throw new Exception("username already exists.");
+        }
         return adminRepository.save(admin);
     }
 

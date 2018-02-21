@@ -32,6 +32,11 @@ public class AdminServiceImpl implements AdminService{
 
         Optional<Admin> admin = adminStream.filter(a -> a.getUsername().equals(query)).findFirst();
 
-        return admin.get() != null ? admin.get() : null;
+        return admin.isPresent() ? admin.get() : null;
+    }
+
+    @Override
+    public boolean hasPerm(Admin adminIn, String perm) {
+        return adminIn.getPerms().stream().anyMatch(adminPerm -> adminPerm.equals(perm));
     }
 }

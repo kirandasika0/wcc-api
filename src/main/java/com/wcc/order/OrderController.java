@@ -4,14 +4,17 @@ import com.wcc.payment.Payment;
 import com.wcc.payment.PaymentRepository;
 import com.wcc.user.User;
 import com.wcc.user.UserRepository;
+import com.wcc.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.Request;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/order")
@@ -23,26 +26,24 @@ public class OrderController {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private ProductRepository productRepository;
+
+    @Autowired UserRepository userRepository;
 
     // Services
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Orders createNewOrder(@RequestBody Orders order) throws Exception{
+        Optional<User> orderUser = userService.findUserByEmail(order.getUser().getEmail());
 
-        // Detect if user is in the database
-        User newUser = new User();
-        newUser.setDisplayName(order.getUser().getDisplayName());
-        newUser.setFullName(order.getUser().getFullName());
-        newUser.setMobileNumber(order.getUser().getMobileNumber());
-        newUser.setEmail(order.getUser().getEmail());
-        userRepository.save(newUser);
-
+        if (!orderUser.isPresent()) {
+            orderUser = Optional.of(userRepository.save(order.getUser()));
+        }
 
         Product orderProduct = productRepository.findOne(order.getProduct().getId());
         if (orderProduct == null) {
@@ -50,7 +51,7 @@ public class OrderController {
         }
 
         order.setProduct(orderProduct);
-        order.setUser(newUser);
+        order.setUser(orderUser.get());
 
         orderRepository.save(order);
 

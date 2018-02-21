@@ -3,7 +3,6 @@ package com.wcc.admin;
     Admin data model.
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
@@ -20,6 +19,7 @@ public class Admin {
     private String username;
 
     @Length(max = 1024)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private ArrayList<String> perms;
